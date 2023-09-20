@@ -16,11 +16,10 @@ const DataTable = ({
       columns={columns}
       loading={loading}
       sx={sx}
-      pagination
+      hideFooterPagination
       pageSize={pageSize}
       page={page}
       onPageChange={onPageChange}
-      rowsPerPageOptions={[100, 200, 500]}
     />
   );
 };
