@@ -1,30 +1,24 @@
-import Axios from "axios";
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import "./CryptoTable.css";
+import { useParams, useLocation } from "react-router-dom";
+import "./CryptoDetails.css";
+import * as React from "react";
 
 const CryptoDetails = () => {
   const { cryptoId } = useParams();
-  const fetchDetails = () => {
-    Axios.get(`https://api.coingecko.com/api/v3/coins/${cryptoId}`)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
-  useEffect(() => {
-    fetchDetails();
-  }, [cryptoId]);
+  const location = useLocation();
+
+  const { rowData } = location.state || {};
 
   return (
-    <div>
-      <p>What is {cryptoId} ?</p>
-      <p>Who created {cryptoId}</p>
-      <p>How does {cryptoId} work?</p>
-      <p>{cryptoId} Mining</p>
+    <div className="Details">
+      <h2>Info</h2>
+      {rowData && (
+        <div>
+          <h3>{rowData.name}</h3>
+          {/* Display other details from rowData as needed */}
+        </div>
+      )}
     </div>
   );
 };
+
 export default CryptoDetails;

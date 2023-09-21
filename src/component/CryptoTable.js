@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import DataTable from "./DataTable";
 import Pagination from "@mui/material/Pagination";
@@ -19,7 +19,7 @@ const CryptoTable = ({ onError }) => {
   const [cryptoId, setCryptoId] = useState("");
   const [page, setPage] = useState(1); // Initialize the current page
   const [search, setSearch] = useState("");
-
+  const navigate = useNavigate();
   useEffect(() => {
     Axios.get(
       `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&page=${page}`
@@ -32,9 +32,6 @@ const CryptoTable = ({ onError }) => {
   const onPageChange = (event, newPage) => {
     setPage(newPage); // Update the current page when the page changes
   };
-  const handleLink = (clickedId) => {
-    return setCryptoId(clickedId);
-  };
 
   const columns = [
     { field: "market_cap_rank", headerName: "#", width: 150 },
@@ -45,16 +42,11 @@ const CryptoTable = ({ onError }) => {
       renderCell: (params) => (
         <div>
           <img src={params.row.image} height="20" width="20" />
-          <Link to={`./details/${params.row.id}`}>
-            <span
-              style={{ fontSize: "16px" }}
-              onClick={() => {
-                handleLink(params.row.id);
-              }}
-            >
-              {" "}
-              {params.row.name}{" "}
-            </span>
+          <Link
+            to={`./details/${params.row.id}`}
+            state={{ rowData: params.row }}
+          >
+            <span style={{ fontSize: "16px" }}>{params.row.name}</span>
           </Link>
           <span style={{ fontSize: "12px" }}>
             {params.row.symbol.toUpperCase()}
