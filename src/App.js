@@ -1,5 +1,6 @@
 import "./App.css";
-import CryptoTable from "./component/CryptoTable";
+import React, { useState } from "react";
+
 import Header from "./component/Header";
 import RouterPages from "./component/Routes";
 

@@ -9,8 +9,8 @@ import SearchCoin from "./SearchCoin";
 const userTableStyles = {
   height: "auto",
   margin: "auto auto",
-  padding: "40px",
-  width: "60%",
+  padding: "20px",
+  width: "50%",
   border: "none",
 };
 
@@ -19,6 +19,7 @@ const CryptoTable = ({ onError }) => {
   const [cryptoId, setCryptoId] = useState("");
   const [page, setPage] = useState(1); // Initialize the current page
   const [search, setSearch] = useState("");
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
     Axios.get(
@@ -27,27 +28,30 @@ const CryptoTable = ({ onError }) => {
       .then((response) => {
         setCryptoData(response.data);
       })
-      .catch(() => onError());
+      .catch((error) => {
+        setError(error);
+        onError();
+      });
   }, [page]);
   const onPageChange = (event, newPage) => {
     setPage(newPage); // Update the current page when the page changes
   };
 
   const columns = [
-    { field: "market_cap_rank", headerName: "#", width: 150 },
+    { field: "market_cap_rank", headerName: "#", width: 80 },
     {
       field: "name",
       headerName: "Coin",
-      width: 500,
+      width: 320,
       renderCell: (params) => (
         <div>
-          <img src={params.row.image} height="20" width="20" />
+          <img src={params.row.image} height="20" width="20" />{" "}
           <Link
             to={`./details/${params.row.id}`}
             state={{ rowData: params.row }}
           >
             <span style={{ fontSize: "16px" }}>{params.row.name}</span>
-          </Link>
+          </Link>{" "}
           <span style={{ fontSize: "12px" }}>
             {params.row.symbol.toUpperCase()}
           </span>
@@ -57,15 +61,12 @@ const CryptoTable = ({ onError }) => {
     {
       field: "current_price",
       headerName: "Price",
-      width: 150,
-      format: (value) => value.toLocaleString("en-US"),
-      format: (value) => value.toFixed(2),
+      width: 130,
     },
     {
       field: "market_cap",
       headerName: "Mkt Cap",
-      width: 200,
-      format: (value) => value.toLocaleString("en-US"),
+      width: 150,
     },
   ];
   const callThisFromChildComponent = (value) => {
@@ -73,25 +74,31 @@ const CryptoTable = ({ onError }) => {
   };
 
   return (
-    <div>
+    <div className="crypto-table-container">
       <SearchCoin callback={callThisFromChildComponent} />
-      <DataTable
-        rows={cryptoData.filter((item) => {
-          return search.toLowerCase() === ""
-            ? item
-            : item.name.toLowerCase().includes(search.toLowerCase());
-        })}
-        columns={columns}
-        loading={!cryptoData.length}
-        sx={userTableStyles}
-      />
-      <Pagination
-        className="pagination-container"
-        count={100}
-        page={page}
-        onChange={onPageChange}
-        shape="rounded"
-      />
+      {error ? (
+        <p>{error}</p>
+      ) : (
+        <div>
+          <DataTable
+            rows={cryptoData.filter((item) => {
+              return search.toLowerCase() === ""
+                ? item
+                : item.name.toLowerCase().includes(search.toLowerCase());
+            })}
+            columns={columns}
+            loading={!cryptoData.length}
+            sx={userTableStyles}
+          />
+          <Pagination
+            className="pagination-container"
+            count={100}
+            page={page}
+            onChange={onPageChange}
+            shape="rounded"
+          />
+        </div>
+      )}
     </div>
   );
 };
