@@ -1,13 +1,52 @@
 .Details {
-  padding: auto;
+  padding: 0;
   margin: 20px 60px;
 }
-.Details_p {
+
+.Details h2 {
+  font-size: 1.5rem;
+}
+
+.Details p {
+  font-size: 1rem;
   background-color: black;
-  color: white;
   width: 70px;
-  border-radius: 10px;
   text-align: center;
-  font-size: small;
-  font-weight: bold;
+  color: bisque;
+  border-radius: 8px;
+}
+
+.gridDetails {
+  background-color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 30px 60px;
+  width: 60%;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.gridDetails img {
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.gridDetails div {
+  display: flex;
+  align-items: center;
+}
+
+.gridDetails h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.gridDetails .MuiTypography-body1 {
+  font-size: 1rem;
+}
+
+.gridDetails .MuiTypography-body1:last-child {
+  margin-bottom: 0;
 }
