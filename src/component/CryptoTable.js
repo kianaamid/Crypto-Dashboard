@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import DataTable from "./DataTable";
 import Pagination from "@mui/material/Pagination";
 import "./CryptoTable.css";
+import SearchCoin from "./SearchCoin";
 
 const userTableStyles = {
   height: "auto",
@@ -17,6 +18,7 @@ const CryptoTable = ({ onError }) => {
   const [cryptoData, setCryptoData] = useState([]);
   const [cryptoId, setCryptoId] = useState("");
   const [page, setPage] = useState(1); // Initialize the current page
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     Axios.get(
@@ -35,7 +37,7 @@ const CryptoTable = ({ onError }) => {
   };
 
   const columns = [
-    { field: "Rank", headerName: "#", width: 150 },
+    { field: "market_cap_rank", headerName: "#", width: 150 },
     {
       field: "name",
       headerName: "Coin",
@@ -60,21 +62,40 @@ const CryptoTable = ({ onError }) => {
         </div>
       ),
     },
-    { field: "current_price", headerName: "Price", width: 150 },
-    { field: "market_cap", headerName: "Mkt Cap", width: 200 },
+    {
+      field: "current_price",
+      headerName: "Price",
+      width: 150,
+      format: (value) => value.toLocaleString("en-US"),
+      format: (value) => value.toFixed(2),
+    },
+    {
+      field: "market_cap",
+      headerName: "Mkt Cap",
+      width: 200,
+      format: (value) => value.toLocaleString("en-US"),
+    },
   ];
+  const callThisFromChildComponent = (value) => {
+    setSearch(value);
+  };
 
   return (
     <div>
+      <SearchCoin callback={callThisFromChildComponent} />
       <DataTable
-        rows={cryptoData}
+        rows={cryptoData.filter((item) => {
+          return search.toLowerCase() === ""
+            ? item
+            : item.name.toLowerCase().includes(search.toLowerCase());
+        })}
         columns={columns}
         loading={!cryptoData.length}
         sx={userTableStyles}
       />
       <Pagination
         className="pagination-container"
-        count={10} // Replace with the actual number of pages
+        count={100}
         page={page}
         onChange={onPageChange}
         shape="rounded"
