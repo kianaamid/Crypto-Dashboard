@@ -1,33 +1,24 @@
+// Import necessary dependencies from external libraries and modules
 import { useLocation } from "react-router-dom";
 import * as React from "react";
+
+import "./CryptoDetails.css"; // Import the CSS file for styling
+
+// Import icons and components from Material-UI
 import { Typography, Grid } from "@mui/material";
-import "./CryptoDetails.css";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
 
-function handleClick(event) {
-  event.preventDefault();
-  console.info("You clicked a breadcrumb.");
-}
-
+// Define the CryptoDetails functional component
 const CryptoDetails = () => {
+  // Get the current location using react-router's useLocation hook
   const location = useLocation();
+  // Destructure rowData from the location state, default to an empty object if not present
   const { rowData } = location.state || {};
+  // Check if rowData is available
   if (rowData) {
     return (
+      // Render cryptocurrency details if rowData is available
       <div>
-        <div role="presentation" onClick={handleClick}>
-          <Breadcrumbs
-            aria-label="breadcrumb"
-            separator={<NavigateNextIcon fontSize="small" />}
-          >
-            <Link underline="hover" color="inherit" href="/">
-              Home
-            </Link>
-            <Typography color="text.primary">Details</Typography>
-          </Breadcrumbs>
-        </div>
         <div className="Details">
           <h2>Information</h2>
           <p>Rank #{rowData.market_cap_rank}</p>
@@ -36,8 +27,8 @@ const CryptoDetails = () => {
               <img
                 src={rowData.image}
                 alt={`${rowData.name} Logo`}
-                height="25"
-                width="25"
+                height="30"
+                width="30"
               />
               <span style={{ fontWeight: "bold", fontSize: "35px" }}>
                 {rowData.name}{" "}
@@ -104,6 +95,7 @@ const CryptoDetails = () => {
       </div>
     );
   } else {
+    // Render an error message if rowData is not available
     return (
       <div>
         <p>Error: No data available for this cryptocurrency.</p>
@@ -114,4 +106,5 @@ const CryptoDetails = () => {
     );
   }
 };
+// Export the CryptoDetails component as the default export
 export default CryptoDetails;
